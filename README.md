@@ -1,6 +1,6 @@
 # Todo App – Playwright Test Suite
 
-![Playwright Tests](https://github.com/YOUR-USERNAME/todo-playwright-qa/actions/workflows/playwright.yml/badge.svg)
+![Playwright Tests](https://github.com/pambarwick/todo-playwright-qa/actions/workflows/playwright.yml/badge.svg)
 
 ## Project Structure
 
