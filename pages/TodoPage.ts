@@ -49,4 +49,18 @@ export class TodoPage {
     await todo.locator(".edit").fill(newText);
     await todo.locator(".edit").press("Enter");
   }
+
+  async cancelEdit(text: string) {
+    const todo = this.page.locator("li", { hasText: text });
+    await todo.dblclick();
+    await todo.locator(".edit").press("Escape");
+  }
+
+  async clearCompleted() {
+    await this.page.getByRole("button", { name: "Clear completed" }).click();
+  }
+
+  getClearCompletedButton() {
+    return this.page.getByRole("button", { name: "Clear completed" });
+  }
 }

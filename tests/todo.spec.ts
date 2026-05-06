@@ -59,4 +59,45 @@ test.describe('Todo App', () => {
         await todoPage.editTodo('Buy milk', 'Buy almond milk');
         await expect(todoPage.getTodoItems().first()).toHaveText('Buy almond milk');
     });
+
+    test('does not add a blank todo', async () => {
+        await todoPage.addTodo('   ');
+        await expect(todoPage.getTodoItems()).toHaveCount(0);
+    });
+
+    test('does not add an empty todo', async ({ page }) => {
+        await page.press('input.new-todo', 'Enter');
+        await expect(todoPage.getTodoItems()).toHaveCount(0);
+    });
+
+    test('cancels edit on Escape key', async () => {
+        await todoPage.addTodo('Buy milk');
+        await todoPage.cancelEdit('Buy milk');
+        await expect(todoPage.getTodoItems().first()).toHaveText('Buy milk');
+    });
+
+    test('clear completed removes completed todos and hides button', async () => {
+        await todoPage.addTodo('Buy milk');
+        await todoPage.addTodo('Walk the dog');
+        await todoPage.toggleTodo('Buy milk');
+
+        await expect(todoPage.getClearCompletedButton()).toBeVisible();
+        await todoPage.clearCompleted();
+
+        await expect(todoPage.getTodoItems()).toHaveCount(1);
+        await expect(todoPage.getTodoItems().first()).toHaveText('Walk the dog');
+        await expect(todoPage.getClearCompletedButton()).not.toBeVisible();
+    });
+
+    test('shows singular item count for one todo', async ({ page }) => {
+        await todoPage.addTodo('Buy milk');
+        await expect(page.getByText('1 item left')).toBeVisible();
+    });
+
+    test('adds a todo with a very long title', async () => {
+        const longText = 'A'.repeat(200);
+        await todoPage.addTodo(longText);
+        await expect(todoPage.getTodoItems()).toHaveCount(1);
+        await expect(todoPage.getTodoItems().first()).toHaveText(longText);
+    });
 });
